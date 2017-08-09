@@ -3,7 +3,12 @@ import os
 import random
 import cv2
 import numpy as np
-    
+
+parser = argparse.ArgumentParse()
+parser.add_argument('--dataroot',type=str,required=True)
+parser.add_argument('--output',type=str,required=True)
+args = parser.parse_args()
+
 def mkdir(path):
     if not os.path.exists(path):
         os.makedirs(path)
@@ -62,9 +67,9 @@ def color_transfer(simg, smask, timg, tmask):
 	# return the color transferred image
 	return transfer
     
-annpath = '/home/archer/dataset/mscoco/annotations/instances_train2014.json'
-imgdir = '/home/archer/dataset/mscoco/train2014'
-resdir = '/home/archer/dataset/mscoco/result'
+annpath = os.path.join(args.dataroot,'annotations','instances_train2014.json')
+imgdir = os.path.join(args.dataroot,'train2014')
+resdir = args.output
 
 mkdir(resdir)
 mkdir(os.path.join(resdir,'gt'))
@@ -93,8 +98,9 @@ for i, imgid in enumerate(imgids):
         if ms>maxmasksum:
             maxmasksum = ms
             ansannid = annid
-    if maxmasksum < 0.1 :
-        continue
+    if maxmasksum > 0.1 :
+        validannimgids.append((imgid,ansannid))
+        
         
 print ('%d valid image for transfer' % len(validannimgids) )
 
@@ -122,12 +128,3 @@ for timgid,tannid in validannimgids:
     if totaliter % 500 == 0:
         print totaliter
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
