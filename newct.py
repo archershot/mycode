@@ -3,8 +3,9 @@ import os
 import random
 import cv2
 import numpy as np
+import argparse
 
-parser = argparse.ArgumentParse()
+parser = argparse.ArgumentParser()
 parser.add_argument('--dataroot',type=str,required=True)
 parser.add_argument('--output',type=str,required=True)
 args = parser.parse_args()
